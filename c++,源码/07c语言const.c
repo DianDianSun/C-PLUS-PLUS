@@ -17,5 +17,9 @@ int main() {
 	*p = 200;
 	int c = b + 2;
 	printf("%d",c);
+	
+	//使用别的文件的全局const修饰的变量需要声明
+	extern const int C;
+	printf("%d",C);
 	return 0;
 }
