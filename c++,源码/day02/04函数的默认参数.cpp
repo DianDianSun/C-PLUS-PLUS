@@ -34,9 +34,9 @@ void func3(int a = 20,int b = 20){
 	
 }
 void test03(){
-	func();
-	func(10);
-	func(10,30);
+	func3();
+	func3(10);
+	func3(10,30);
 }
 
 int main() {
