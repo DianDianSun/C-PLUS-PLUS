@@ -636,6 +636,39 @@ void func(double n,int a){
 
 1. 严格的类型匹配，如果类型不匹配，那么尝试转换，转换成功就调用，失败就报错
 
+   ```c++
+   void test01(){
+   	int a =10;
+   	double b = 3.14;
+   	func();
+   	//func(b);err double转换不来 int 或者char
+   	
+   	func(a,b);
+   	char c = 'c';
+   	func(c);//char 可以转换 int 成功，调用int参数的函数
+   }
+   ```
+
+5.函数重载和函数的默认参数一起使用，需要注意二义性问题
+
+```c++
+//函数重载和函数的默认参数一起使用
+void myfunc(int a,int b = 0){
+	cout << "b" << endl;
+}
+void myfunc(int a){
+	cout << "a" << endl;
+}
+void test02(){
+	//myfunc(3);//err,二义性问题，不知道掉用哪个函数
+}
+```
+
+6.函数的返回值不作为函数重载的条件
+
+编译器是通过你调用函数时，传入的参数来判断调用重载的那个函数，我们调用函数时不需要写返回值，所以
+返回值不能作为函数重载的条件
+
 ## 07.函数重载的原理🌟
 
 ## 08.c++调用c语言的函数🌟

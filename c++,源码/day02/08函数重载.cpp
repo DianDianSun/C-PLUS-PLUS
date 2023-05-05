@@ -29,8 +29,18 @@ void test01(){
 	char c = 'c';
 	func(c);//char 可以转换 int 成功，调用int参数的函数
 }
+//函数重载和函数的默认参数一起使用
+void myfunc(int a,int b = 0){
+	cout << "b" << endl;
+}
+void myfunc(int a){
+	cout << "a" << endl;
+}
+void test02(){
+	//myfunc(3);//err,二义性问题，不知道掉用哪个函数
+}
 int main() {
 	
-	test01();
+	test02();
 	return 0;
 }
