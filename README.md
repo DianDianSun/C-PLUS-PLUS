@@ -671,10 +671,107 @@ void test02(){
 
 ## 07.函数重载的原理🌟
 
+1.函数重载的原理是在汇编时，给各个函数取别名，c语言不能重载的原因是没有取别名
+
 ## 08.c++调用c语言的函数🌟
+
+1.c++的函数在汇编时，会给函数取别名，c语言的不会，这时，如果c++来调用c语言的函数，c++会取找取了别名的函数，但是c语言没有别名，这是会出错
+
+```c++
+
+
+//这是告诉c编译器，找下面的函数，要以c语言的方式去寻找
+#ifdef _cplusplus
+extern "C"
+{
+#endif
+
+	void func();//c语言的函数声明
+
+#ifdef _cplusplus
+}
+#endif
+```
+
+
 
 ## 09.类和对象的概念🌟
 
+1.类是自定义数据类型，是c语言的结构题进化而成的
+
+2.对象是类实例化出的，用数据类型定义一个变量
+
+```c++
+#include <iostream>
+using namespace std;
+
+class Dian{//这个是类
+public:
+	int a;//成员属性（成员变量）
+	void func(){//成员方法（成员函数）
+		cout << "func" << endl;
+	}
+};
+
+int main() {
+	
+	Dian dian;//dian就是对象
+	dian.func();
+	return 0;
+}
+```
+
 ## 10.类的封装🌟
+
+1.封装是把属性（变量）和方法（函数）封装到类内，然后给这些数据赋予权限
+
+2.为什么要有封装
+
+1. 防止乱调用函数，变量，出现错误
+2. 维护代码更方便
+
+3.权限
+
+```c++
+
+//封装：1.把属性和方法封装到类中 2.给这些数据赋予权限
+class Dian{
+private://私有权限
+	int id;
+	string name;
+public://公有权限
+	void set(string Name,int ID){
+		id = ID;
+		name = Name;
+	}
+	void printDian(){
+		cout << id <<" "<< name << endl;
+	}
+protected:
+	int a;
+};
+class Sun : public Dian{
+	void func(){
+		a = 20;
+	}
+};
+//类外不能访问私有权限
+//类外可以访问公有权限
+//类外不能访问保存权限的成员
+//子类的类内可以访问父类的保护权限的成员
+//类内没有权限之分
+void MyPrint(){
+	Dian dian;
+	dian.set("dian",825);
+	dian.printDian();
+}
+
+```
+
+4.尽量把属性设置为私有权限
+
+1. 可以控制属性的读写权限
+2. 可赋予客户端访问数据的一致性
+3. 可以保护属性的合法性
 
 ## 11.类和结构体的区别
