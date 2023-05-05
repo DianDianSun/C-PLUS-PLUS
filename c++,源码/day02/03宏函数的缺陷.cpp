@@ -13,12 +13,12 @@ void test01(){
 	int ref2 = Add(10 , 20 )*2;
 	cout << ref2 << endl;
 }
-#define COMAPD(x,y) x<?x:y
+#define COMAPD(x,y)  ((x)<(y)?(x):(y))
 void test02(){
 	int a = 1;
 	int b = 3;
 	//
-	cout << COMAPD(a,b) << endl;
+	cout << COMAPD(++a,b) << endl;//3
 }
 int main() {
 	
