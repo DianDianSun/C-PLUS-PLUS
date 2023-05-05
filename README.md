@@ -603,7 +603,36 @@ void swap3(int &a,int &b){
 
 
 
-## 06.函数重载🌟
+## 06.函数重载(OVERLOAD)🌟
+
+1.函数重载是：允许函数名相同，这种现象叫做函数重载
+
+2.函数重载的作用：为了方便使用函数名
+
+3.函数重载的条件：同一个作用域，参数的个数不同，参数的顺序不同，参数的类型不同
+
+```c++
+/参数的个数不同
+void func(){
+	cout << "func()"<<endl;
+}
+void func(int n){
+	cout << "func(int n)"<<endl;
+}
+//参数的类型不同
+void func(char c){
+	 cout << "func(char)"<<endl;
+}
+//参数的顺序不同
+void func(int a,double n){
+	cout << "func(int a,double n)";
+}
+void func(double n,int a){
+	cout << "func(int a,double n)";
+}
+```
+
+
 
 ## 07.函数重载的原理🌟
 
