@@ -32,6 +32,23 @@ void test02(){
 	string str = "world";
 	cout << str;
 }
+class Point{
+	
+public:
+	char a;
+	char b;
+	char bomb;
+public:
+	void my_set(char A = '.',char C = '0',char B = '0'){
+		if(A == '*'){
+			
+		}
+	}
+	void my_printf(){
+		
+	}
+	
+};
 int main() {
 	
 	test02();

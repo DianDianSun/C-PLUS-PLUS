@@ -19,8 +19,18 @@ void func(int a,double n){
 void func(double n,int a){
 	cout << "func(int a,double n)";
 }
+void test01(){
+	int a =10;
+	double b = 3.14;
+	func();
+	//func(b);err double转换不来 int 或者char
+	
+	func(a,b);
+	char c = 'c';
+	func(c);//char 可以转换 int 成功，调用int参数的函数
+}
 int main() {
 	
-	
+	test01();
 	return 0;
 }
