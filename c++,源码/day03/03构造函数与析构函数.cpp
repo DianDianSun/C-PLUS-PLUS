@@ -43,6 +43,7 @@ public:
 	char *pname;
 	int mage;
 };
+//有参构造函数
 class Dian3{
 public:
 	//注意1:构造函数可以重载
