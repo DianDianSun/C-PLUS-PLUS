@@ -1030,4 +1030,131 @@ void test01(){
 
 ## 9.多个对象的构造和析构🌟
 
+1.如果类有成员对象，那么先调用成员对象的构造函数，再调用本身的构造函数
+
+析构函数的调用顺序相反
+
+2.成员对象的构造函数调用和定义顺序一样
+
+3.注意。，如果有成员对象，那么实例化对象时，必须保证成员对象的构造和析构能被调用
+
+```c++
+class DDS{
+public:
+	DDS(){
+		cout << "DDSgouzao" << endl;
+	}
+	~DDS(){
+		cout << "DDSxigou" << endl;
+	}
+};
+class dds{
+public:
+	dds(){
+		cout << "ddsgouzao" << endl;
+	}
+	~dds(){
+		cout << "ddsxixigou" << endl;
+	}
+};
+class Dian {
+private:
+	DDS a;
+	dds b;
+public:
+	Dian(){
+		cout << "Diangouzao" << endl;
+	}
+	~Dian(){
+		cout << "Dianxixigou" << endl;
+	}
+};
+```
+
+2.初始化列表
+
+1.初始化列表是干什么用的，指定调用成员对象的某个构造函数
+
+2.初始化列表只能写在构造函数中
+
+3.如果有多个对象需要指定调用某个构造函数，用逗号隔开
+
+4.如果使用了初始化列表，那么所有的构造函数都要写初始化列表
+
+5.可以使用对象的构造函数传递数值给成员对象的变量
+
+```c++
+class dds1{
+public:
+	dds1(int b){
+		cout << "dds1gouzao" << endl;
+	}
+	~dds1(){
+		cout << "dds1xixigou" << endl;
+	}
+};
+class Dian1 {
+private:
+	DDS1 a;
+	dds1 b;
+public:
+	Dian1():a(10),b(10){
+		cout << "Dian1gouzao" << endl;
+	}
+	~Dian1(){
+		cout << "Dian1xixigou" << endl;
+	}
+};
+```
+
+
+
 ## 10.对象的深浅拷贝🌟
+
+1.默认的拷贝构造函数进行了简单的赋值操作（浅拷贝）
+
+2.浅拷贝的缺点
+
+//同一块空间呗是放两次
+
+```c++
+void test02(){
+	Student s1("DianDian",19);
+	Student s2(s1);
+	
+	cout << s1.pname<< " "<< s1.age << endl;
+	cout << s2.pname<< " "<< s2.age << endl;
+}
+```
+
+深拷贝
+
+```c++
+class Student{
+public:
+	Student(const char*name,int Age){
+		pname = (char *)malloc(strlen(name)+1);
+		strcpy(pname,name);
+		age = Age;
+	}
+	//深拷贝
+	Student(const Student &m){
+		//1.分配空间
+		pname = (char*)malloc(strlen(m.pname)+1);
+		//2.拷贝
+		strcpy(pname, m.pname);
+		age = m.age;
+	}
+	~Student(){
+		if(pname != NULL){
+			free(pname);
+			pname = NULL;
+		}
+	}
+
+public:
+	char *pname;
+	int age;
+};
+```
+
