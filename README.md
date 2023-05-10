@@ -1596,12 +1596,77 @@ void  test(){
 
 2.实现单例化模式的思路
 
-1. 把午餐构造函数和拷贝构造函数私有化
-
+1. 把无参构造函数和拷贝构造函数私有化
 2. 定义一个类内的静态成员指针
-
 3. 在类外初始化，new一个对象
-
 4. 把指针的权限设置为私有，然后提供一个静态成员函数让外面获取这个指针
 
-   
+3.实例
+
+```c++
+#include <iostream>
+using namespace std;
+
+//需要，获取打印机使用的次数
+class Printer{
+private:
+	int actimes;//记录打印次数
+private:
+	//1.把无参构造和拷贝私有化
+	Printer(){
+		actimes = 0;
+	}
+	Printer(const Printer&a){}
+public:
+	static Printer *getp(){
+		return p;
+	}
+	void printp(string name){
+		cout << name << "print"<<endl;
+		actimes++;
+	}
+	int getact(){
+		return actimes;
+	}
+private:
+	static Printer *p;//定义静态成员指针
+};
+//3.类外初始化，new对象
+Printer *Printer::p = new Printer; 
+
+void test(){
+	Printer *p1 = Printer::getp();
+	p1->printp("sell");
+	Printer *p2 = Printer::getp();
+	p1->printp("technology");
+	Printer *p3 = Printer::getp();
+	p1->printp("gongguan");
+	cout << p1->getact()<<endl;
+}
+int main() {
+	
+	test();
+	
+	return 0;
+}
+```
+
+# DYA05
+
+## 01.数组类
+
+## 02.运算符重载的概念
+
+## 03.加号运算符重载
+
+## 04.减号运算符重载
+
+## 05.左移和右移运算符重载
+
+## 06.赋值运算符重载
+
+## 07.关系运算符重载
+
+## 08.前置加加和后置加加运算符重载
+
+## 09.数组下标运算符重载
