@@ -1384,6 +1384,224 @@ public:
 
 ## 06.常函数和常对象🌟
 
+1.常函数
+
+1. 在函数的后面加上const 就变成常函数
+2. 常函数内不能修改普通成员变量
+3. const 修饰的是this指针指向的空间的变量不能改变 
+4. mutable 修饰的成员变量在常函数中可以修改
+
+```c++
+
+class Dian{
+public:
+	int mId;
+	int mAge;
+	mutable int sorce;
+public:
+	Dian(int id,int age){
+		mAge = age;
+		mId = id;
+	}
+	//常函数,1.函数的()后main加上const，该函数变为常函数
+	void print()const{
+		//id = 100;err  2.常函数内不能修改普通成员变量
+		//3.const 修饰的是this指针指向的空间的变量不能改变
+		//Dian *const this
+		//const Dian *const this ,这是常函数修饰的
+		sorce = 100;//4.mutable 修饰的成员变量在常函数中可以修改
+	}
+};
+
+```
+
+2.常对象
+
+1. 在数据类型前加上constant，让对象成为常对象
+2. 常对象可以调用常函数
+3. 常对象可以调用mutable的值 
+
+```c++
+class Dian{
+public:
+	int mId;
+	int mAge;
+	mutable int sorce;
+public:
+	Dian(int id,int age){
+		mAge = age;
+		mId = id;
+	}
+	//常函数,1.函数的()后main加上const，该函数变为常函数
+	void print()const{
+		//id = 100;err  2.常函数内不能修改普通成员变量
+		//3.const 修饰的是this指针指向的空间的变量不能改变
+		//Dian *const this
+		//const Dian *const this ,这是常函数修饰的
+		sorce = 100;//4.mutable 修饰的成员变量在常函数中可以修改
+	}
+};
+void test(){
+	//1.在数据类型前加上constant，让对象成为常对象
+	const Dian m(1,18);//常对象
+	//m.mId = 100;//erro 常对象不能改变普通变量成员变量的值
+	//m.print;//擦好难过对象不能调用普通成员函数
+	m.print();//常对象可以调用常函数
+	m.sorce = 1;//常对象可以调用常函数
+		
+}
+```
+
 ## 07.友元🌟
 
+- 友元的概念
+
+友元是赋予全局函数，或者类的成员函数，类有访问别的类的私有成员权限
+
+注意：友元函数不会死类的成员函数q
+
+1.全局友元函数
+
+```c++
+class Building{
+	//声明全局变量为Building类的友元函数
+	friend void GoodGay(Building &a);
+public:
+	Building(){
+		keting = "keting";
+		woshi = "woshi";
+	}
+public:
+	string keting;
+private:
+	string woshi;
+};
+
+void GoodGay(Building &a){
+	cout << "haojiyou"<<a.keting <<endl;
+	cout << "sfasfs" << a.woshi <<endl;
+}
+void test01(){
+	Building a;
+	GoodGay(a);
+}
+```
+
+2. 友元类
+
+   ```c++
+   class Building{
+   	friend class Goodf;
+   	friend class Goodf2;
+   public:
+   	Building(){
+   		keting = "keting";
+   		woshi = "woshi";
+   	}
+   public:
+   	string keting;
+   private:
+   	string woshi;
+   };
+   
+   class Goodf{
+   public:
+   	void func(Building &a){
+   		cout << a.keting <<endl;
+   		cout << a.woshi <<endl;
+   	}
+   };
+   class Goodf2{
+     //通过传入指针来friend
+   public:
+   	Building *pbu;
+   public:
+   	Goodf2(){
+   		pbu = new Building;
+   	}
+   	Goodf2(const Goodf2 &a){
+   		//1.申请空间
+    		pbu = new Building;
+   		cout << "kkao";
+   	
+   	};
+   	void func(){
+   		cout << pbu->keting <<endl;
+   		cout << pbu->woshi<< endl;
+   	}
+   	~Goodf2(){
+   		if(pbu != NULL){
+   			delete pbu;
+   			pbu = NULL;
+   		}
+   	}
+   };
+   //1.通过传入参数来访问类的私有成员
+   void test01(){
+   	Building bd;
+   	Goodf f;
+   	f.func(bd);
+   }
+   void test02(){
+   	Goodf2 f;
+   	f.func();
+   	
+   	Goodf2 f2 = f;
+   }
+   ```
+
+3.类的友元成员函数（难点）
+
+```c++
+//1.编译器知道类的声明，不知道类的结构；
+class Building;
+class GoodGay{
+public:
+	void func(Building &bud);
+	
+};
+class Building{
+	//声明
+	friend void GoodGay::func(Building &bud);
+public:
+	Building(){
+		keting = "keting";
+		woshi = "woshi";
+	}
+public:
+	string keting;
+private:
+	string woshi;
+};
+void GoodGay::func(Building &bud){
+	cout << "访问" << bud.keting <<endl;
+	cout << "卧室" << bud.woshi <<endl;
+}
+void  test(){
+	Building bud;
+	GoodGay Gf;
+	Gf.func(bud);
+}
+```
+
+4.友元的注意
+
+1. 友元关系不能被继承
+2. 友元关系是单向的，A是B的朋友，反过来不一定
+3. 友元关系不具有传递性
+
 ## 08.单例模式🌟
+
+1.单例模式是一个类只能实例化一个对象
+
+2.实现单例化模式的思路
+
+1. 把午餐构造函数和拷贝构造函数私有化
+
+2. 定义一个类内的静态成员指针
+
+3. 在类外初始化，new一个对象
+
+4. 把指针的权限设置为私有，然后提供一个静态成员函数让外面获取这个指针
+
+   
