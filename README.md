@@ -1655,18 +1655,123 @@ int main() {
 
 ## 01.数组类
 
-## 02.运算符重载的概念
+## 02.运算符重载的概念🌟
 
-## 03.加号运算符重载
+1.运算符重载，就是对已有的运算符重现进行定义，赋予其另一种功能，以适应不同的数据类型
 
-## 04.减号运算符重载
+2.运算符重载的目的是让**语法更加简洁**
 
-## 05.左移和右移运算符重载
+3.运算符重载不能改变本来寓意，不能改变基础类型寓意
 
-## 06.赋值运算符重载
+4.运算符重载的本质是另一种函数调用
+
+5.这个函数统一的名字叫**operator@**
+
+6.重载函数可以写成**全局**或**成员函数**
+
+7.重载函数如果写成全局的，那么双目运算符左边的是第一个参数，右边是第二个参数
+
+8.重载函数如果写成**成员函数**，那么双目运算符的左边是**this**，右边是**第一个参数**
+
+## 03.加号运算符重载🌟 
+
+1.同类型相加
+
+```c++
+#include <iostream>
+using namespace std;
+
+class Dian{
+public:
+	int id;
+	int age;
+public:
+	Dian(int id,int age){
+		this->id = id;
+		this->age = age;
+	}
+	//写到成员函数，那么只需要一个参数，这个参数是加号的右边
+	Dian operator+(Dian &m2){
+		Dian temp(this->id + m2.id,this->age + m2.age);
+		return temp;
+	}
+};
+//全局方式//2.编译器调用这个函数
+//Dian operator+(Dian &p1,Dian &p2)//3.编译器检查参数是否对应，第一个参数对应左边，第二个参数对应右边
+//{
+//	Dian temp(p1.id + p2.id,p1.age + p2.age);
+//	return temp;
+//}
+void test01(){
+	Dian m1(1,20);
+	Dian m2(2,10);
+	Dian m3 = m1 + m2;//1.编译器看到两个对象相加，那么编译会找有没有叫operator+的函数
+	cout << m3.id << m3.age<<endl;
+	Dian m4 = m3 + m2 + m1;
+	cout << m4.id << m4.age;
+}
+int main() {
+	
+	
+	
+	test01();
+	return 0;
+}
+```
+
+2.不同类型相加
+
+```c++
+#include <iostream>
+using namespace std;
+
+class Dian{
+public:
+	int id;
+	int age;
+public:
+	Dian(int id,int age){
+		this->id = id;
+		this->age = age;
+	}
+};
+class Sun{
+public:
+	int id;
+public:
+	Sun(int id){
+		this->id = id;
+	}
+};
+Dian operator+(Dian &m1,Sun &s1){
+	Dian tmep(m1.id + s1.id,m1.age);
+	
+	return tmep;
+}
+void test(){
+	Dian m1(1,18);
+	Sun s1(2);
+	Dian m2 = m1 + s1;
+	cout << m2.id << m2.age<<endl;
+}
+int main() {
+	
+	test();
+	
+	return 0;
+}
+```
+
+
+
+## 04.减号运算符重载🌟
+
+## 05.左移和右移运算符重载🌟
+
+## 06.赋值运算符重载🌟
 
 ## 07.关系运算符重载
 
-## 08.前置加加和后置加加运算符重载
+## 08.前置加加和后置加加运算符重载🌟
 
 ## 09.数组下标运算符重载
