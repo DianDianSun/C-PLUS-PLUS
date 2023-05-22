@@ -50,7 +50,7 @@ namespace A {//A是空间的名字
 
 > 3.命名空间是开放的，随时可以加入新成员，但是新成员只能在加入后使用
 
-> 4.匿名命名空间
+>  4.匿名命名空间
 
 >5.命名空间可以取别名
 
@@ -1651,7 +1651,7 @@ int main() {
 }
 ```
 
-# DYA05
+# DAY05
 
 ## 01.数组类
 
@@ -1682,7 +1682,8 @@ int main() {
 using namespace std;
 
 class Dian{
-public:
+friend void operator<<(ostream &out,Dian &m);
+private:
 	int id;
 	int age;
 public:
@@ -1766,12 +1767,570 @@ int main() {
 
 ## 04.减号运算符重载🌟
 
+```c++
+#include <iostream>
+using namespace std;
+
+class Dian{
+public:
+	int id;
+public:
+	Dian(int id){
+		this->id = id;
+	}
+//	Dian operator-(Dian &m1){
+//		Dian m3(this->id - m1.id);
+//		return m3;
+//	}
+};
+Dian operator-(Dian &m1,Dian &m2)
+{
+	Dian m3(m1.id - m2.id);
+	return m3;
+}
+void test()
+{
+	Dian m1(10);
+	Dian m2(20);
+	Dian m3 = m1 - m2;
+	cout << m3.id << endl;
+}
+int main() {
+	
+	
+	test();
+	return 0;
+}
+```
+
+
+
 ## 05.左移和右移运算符重载🌟
+
+1. 左移运算符重载
+
+   1. cout是对象，<< 是左移操作符
+   2. 重载左移运算符是为了直接打印对象
+   3. 形参和实参是一个对象
+   4. 不能改变库类中的代码
+   5. ostream中把拷贝构造函数私有化了
+   6. 如果要和enl一起使用那么必须返回ostream的对象
+
+   ```c++
+   #include <iostream>
+   #include <string>
+   using namespace std;
+   
+   class Dian
+   {
+   public:
+   	int id;
+   	string r;
+   public:
+   	Dian(int id,string s = "zhaoxuridiandian")
+   	{
+   		this->id = id;
+   		this->r = s;
+   	}
+   };
+   //1.形参和实参是一个对象
+   //2.不能改变库类中的代码
+   //3.ostream中把拷贝构造函数私有化了
+   //4.如果要和endl一起使用，那么必须返回ostream的对象 
+   void operator<<(ostream &out,Dian &m)
+   {
+   	cout << m.id << " "<<m.r <<endl;
+   }
+   void test01()
+   {
+   	Dian d(3);
+   	cout << d ;
+   }
+   int main() {
+   	
+   	
+   	test01();
+   	return 0;
+   }
+   ```
+
+2.右移操作符重载
+
+```c++
+#include <iostream>
+using namespace std;
+
+class Dian
+{
+public:
+	string name;
+	int age;
+public:
+	Dian(string name , int age)
+	{
+		this->name = name;
+		this->age = age;
+	}
+	int getAge(){
+		return age;
+	}
+};
+istream &operator>>(istream &in,Dian &m)
+{
+	in>>m.age;
+	in>>m.name;
+	return in;
+}
+ostream &operator<<(ostream &out,Dian &m)
+{
+	out << m.age << endl;
+	out << m.name << endl;
+	return out;
+}
+void test02()
+{
+	Dian m("diandian",0),m2("diandian",0);
+	cin >> m >> m2;
+	cout << m <<endl;
+	cout << m2 << endl;
+}
+int main()
+{
+	
+	
+	test02();
+	return 0;
+}
+```
+
+
 
 ## 06.赋值运算符重载🌟
 
+1.编译器默认给类提供了一个默认的赋值运算符重载函数
+
+2.默认的赋值运算符
+
+```c++
+class Dian
+{
+public:
+	int id;
+	int age;
+public:
+	Dian()
+	{
+		id = 0;
+		age = 0;
+	}
+	Dian(int id,int age)
+	{
+		this->id = id;
+		this->age = age;
+	}
+};
+void test()
+{
+	Dian m1(10,20);
+	Dian m2;
+	m1 = m2;//赋值操作
+	//默认的赋值运算符重载函数进行了简单的赋值操作
+
+}
+```
+
+3.当类中有成员指针时，然后再构造函数中申请堆区空间，在析构函数释放堆区空间，会出现同一块空间释放两次，然后内存泄漏
+
+```c++
+#include <iostream>
+using namespace std;
+
+class Dian
+{
+public:
+	int id;
+	int age;
+public:
+	Dian()
+	{
+		id = 0;
+		age = 0;
+	}
+	Dian(int id,int age)
+	{
+		this->id = id;
+		this->age = age;
+	}
+};
+void test()
+{
+	Dian m1(10,20);
+	Dian m2;
+	m1 = m2;//赋值操作
+	//默认的赋值运算符重载函数进行了简单的赋值操作
+
+}
+class Sun
+{
+public:
+	Sun(const char *name)
+	{
+		pname = new char[strlen(name) + 1];
+		strcpy(pname,name);
+	}
+	Sun(const Sun &m)
+	{
+		pname = new char[strlen(m.pname) + 1];
+		strcpy(pname,m.pname);
+	}
+	~Sun()
+	{
+		delete[] pname;
+		pname = NULL;
+	}
+	Sun &operator=(const Sun &m)
+	{
+		if(this->pname != NULL)
+			{
+				delete [] this->pname;
+			}
+		//1.不能确定this->pname指向的空间是否能装下stu数据，故先释放后重新申请空间
+		this->pname = new char[strlen(m.pname) + 1];
+		//2
+		strcpy(this->pname,m.pname);
+		return *this;
+	}
+	void print()
+	{
+		cout << pname << endl;
+	}
+public:
+	char *pname;
+};
+
+void test02()
+{
+	Sun s1("diandain");
+	Sun s2("sun");
+	s2 = s1;
+	s1.print();
+	s2.print();
+}
+//赋值运算符重载中为什么要返回引用
+void test03()
+{
+	Sun s1("a");
+	Sun s2("b");
+	Sun s3("c");
+	s1 = s2 = s3;
+	cout << s1.pname << endl;
+	cout << s2.pname << endl;
+	cout << s3.pname << endl;
+	//如果返回的是值，s2 = s3 这个表达式会产生一个新的对象
+	//s1 = s2 = s3
+  //s2 = s3 这个表达式要返回s2这个对象，所以要返回引用
+	
+}
+int main()
+{
+	
+	test03();
+	
+	return 0;
+}
+```
+
+4.为什么要返回引用
+
+```c++
+void test03()
+{
+	Sun s1("a");
+	Sun s2("b");
+	Sun s3("c");
+	s1 = s2 = s3;
+	cout << s1.pname << endl;
+	cout << s2.pname << endl;
+	cout << s3.pname << endl;
+	//如果返回的是值，s2 = s3 这个表达式会产生一个新的对象
+	//s1 = s2 = s3
+  //s2 = s3 这个表达式要返回s2这个对象，所以要返回引用
+	
+}
+```
+
+
+
 ## 07.关系运算符重载
+
+```c++
+#include <iostream>
+using namespace std;
+
+class Dian
+{
+public:
+	int id;
+	int age;
+public:
+	Dian()
+	{
+		id = 0;
+		age = 0;
+	}
+	Dian(int id,int age)
+	{
+		this->id = id;
+		this->age = age;
+	}
+};
+int operator==(Dian &m1,Dian &m2)
+{
+	if(m1.id == m2.id&&m1.age == m2.age)
+	{
+		return 1;
+	}else
+	{
+		return 0;
+	}
+	
+}
+void test()
+{
+	Dian m1(11,20);
+	Dian p1;
+	
+	if(m1 == p1)
+	{
+		cout << "666";
+	}else
+	{
+		cout << "777";
+	}
+	
+}
+
+int main()
+{
+	
+	test();
+	
+	return 0;
+}
+```
+
+
 
 ## 08.前置加加和后置加加运算符重载🌟
 
+```c++
+#include <iostream>
+using namespace std;
+
+class Dian
+{
+	friend ostream &operator<<(ostream &out,Dian &m);
+public:
+	
+	int a;
+public:
+	Dian(int a)
+	{
+		this->a = a;
+	}
+	//重载前置++
+	Dian &operator++()
+	{
+		++a;
+		return *this;
+	}
+	//后置++
+	Dian operator++(int)//占位参数必须时int
+	{
+		//后置加加，先返回，后加加
+		Dian tmp(*this);
+		
+		++(this->a);
+		return tmp;
+	}
+};
+ostream &operator<<(ostream &out,Dian &m)
+{
+	out << m.a;
+	return out;
+}
+void test02()
+{
+	Dian m1(1);
+	cout << m1 <<endl;//1
+	cout << ++m1 <<endl;//2
+	cout << (m1++).a <<endl;//2
+	cout << m1 <<endl;//3
+	//同等条件下，友夏安使用前置加加
+}
+int main()
+{
+	
+	
+	test02(); 
+	return 0;
+}
+```
+
 ## 09.数组下标运算符重载
+
+```C++
+MyArray &MyArray::operator=(const MyArray &m)
+{
+	//1.释放原来空间
+	if(this->pArray != NULL)
+	{
+		delete[] this->pArray;
+		this->pArray = NULL;
+	}
+	this->mCapacity = m.mCapacity;
+	this->mSize = m.mSize;
+	//2.申请空间，大小由m决定
+	this->pArray = new int[m.mCapacity];
+	//3.拷贝数据
+	for(int i = 0;i < m.mCapacity;i++)
+	{
+		this->pArray[i] = m.pArray[i];
+	}
+	return *this;
+}
+
+int &MyArray::operator[](int index)
+{
+	return this->pArray[index];
+}
+
+```
+
+# DAY06
+
+## 01.智能指针类🌟
+
+1.智能指针类是管理另一个类的对象的释放
+
+```c++
+class Dian
+{
+public:
+	Dian()
+	{
+		cout << "wucan"<<endl;
+	}
+	void print()
+	{
+		cout << "hello"<<endl;
+	}
+	~Dian()
+	{
+		cout << "xigou"<<endl;
+	}
+};
+class Sun
+{
+private:
+	Dian *pDian;
+public:
+	Sun(Dian *m)
+	{
+		this->pDian = m;
+	}
+	~Sun()
+	{
+		cout << "SU nxigou"<<endl;
+		if(this->pDian != NULL)
+		{
+			delete this->pDian;
+			this->pDian = NULL;
+		}
+	}
+};
+void test01()
+{
+	Dian *p = new Dian;
+	
+	Sun sm(p);
+	//当test01函数结束时，会调用Sun的析构函数
+	//在这析构函数中delete了Dian的对象，会调用Dian的析构函数
+}
+```
+
+2.指针运算符重载
+
+```c++
+//重载->
+Dian *operator->()
+	{
+		return this->pDian;
+	}
+void test02()
+{
+	Dian *p = new Dian;
+	
+	Sun sm(p);
+	sm->print();
+}
+```
+
+3.重载星花*
+
+```c++
+//重载星花*
+Dian &operator*()
+	{
+		return *(this->pDian);
+	}
+
+void test02()
+{
+	Dian *p = new Dian;
+	
+	Sun sm(p);
+	
+	(*sm).print();
+}
+```
+
+## 02.重载函数调用符号🌟
+
+## 03.其他重载的重载
+
+## 04.字符串类
+
+## 05.继承的作用🌟
+
+## 06.继承方式🌟
+
+## 07.继承中的对象模型工程
+
+## 08.继承中的构造和析构🌟
+
+## 09.继承中同名成员的处理方法🌟
+
+## 10.继承中同名成员的处理方法🌟
+
+## 11.非自动继承的函数
+
+## 12.多继承
+
+
+
+## 13.菱形继承🌟
+
+1.虚基类
+
+2.菱形继承的问题
+
+3.虚继承
+
+## 14.动态联编和静态联编**🌟**
+
+1.静态联编
+
+2.虚函数
+
+3.动态联编

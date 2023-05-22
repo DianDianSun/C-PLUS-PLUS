@@ -105,4 +105,27 @@ void MyArray::Set(int pos,int val){
 	}
 	this->pArray[pos] = val;
 }
+MyArray &MyArray::operator=(const MyArray &m)
+{
+	//1.释放原来空间
+	if(this->pArray != NULL)
+	{
+		delete[] this->pArray;
+		this->pArray = NULL;
+	}
+	this->mCapacity = m.mCapacity;
+	this->mSize = m.mSize;
+	//2.申请空间，大小由m决定
+	this->pArray = new int[m.mCapacity];
+	//3.拷贝数据
+	for(int i = 0;i < m.mCapacity;i++)
+	{
+		this->pArray[i] = m.pArray[i];
+	}
+	return *this;
+}
 
+int &MyArray::operator[](int index)
+{
+	return this->pArray[index];
+}

@@ -9,6 +9,7 @@ void printMyArray(MyArray &arr){
 	cout<<endl;
 }
 void test01(){
+		
 	MyArray arr(20,1);
 	printMyArray(arr);
 	for(int i = 0;i < arr.Size();i++)

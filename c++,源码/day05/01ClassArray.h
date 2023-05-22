@@ -11,6 +11,12 @@ public:
 	MyArray();
 	MyArray(const MyArray &a);
 	MyArray(int capacity,int val = 0);
+	
+	//重写赋值运算符重载函数
+	MyArray &operator=(const MyArray &m);
+	
+	int &operator[](int index);
+	
 	~MyArray();
 	//头插
 	void PushFront(int val);
