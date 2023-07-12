@@ -20,7 +20,7 @@ namespace Makeer {
 	int c = 30;
 }
 static int e = 50;
-//匿名命名空间类似static int d = 50;
+//!匿名命名空间类似static int d = 50;
 namespace{
 	int d = 50;
 }
