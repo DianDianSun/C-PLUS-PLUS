@@ -4,8 +4,9 @@ using namespace std;
 int main() {
 	
 	int arr[] = {1,2,4,5};
-	//第一种方法
+	// 第一种方法
 	//1.定义数组类型
+	//!555
 	typedef int(my)[4];//数组类型
 	//2.建立引用
 	my &p = arr;
