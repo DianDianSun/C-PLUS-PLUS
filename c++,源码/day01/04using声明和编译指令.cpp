@@ -6,10 +6,9 @@ namespace A{
 	int b = 20;
 	int c = 30;
 }
-nihao
 void test01(){
 	
-	//using声明是让命名空间中某个标识符可以直接使用
+	//using声明是让命名空间中某个标识符可以直接使用点点真可爱
 	using A::a;
 	cout << a << endl;
 	
